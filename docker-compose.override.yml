@@ -1,0 +1,22 @@
+# Docker Compose override for Coolify integration + sandbox support
+# This file adds:
+# 1. Coolify network for Traefik routing
+# 2. Docker socket for sandbox isolation
+
+services:
+  openclaw-gateway:
+    build:
+      context: .
+      args:
+        - OPENCLAW_DOCKER_APT_PACKAGES=${OPENCLAW_DOCKER_APT_PACKAGES}
+        - OPENCLAW_INSTALL_DOCKER_CLI=${OPENCLAW_INSTALL_DOCKER_CLI}
+    networks:
+      - coolify
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add:
+      - "988"
+
+networks:
+  coolify:
+    external: true

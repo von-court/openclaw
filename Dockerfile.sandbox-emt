@@ -1,0 +1,27 @@
+# syntax=docker/dockerfile:1.7
+
+FROM alpine:3.23
+
+# Alpine uses apk; no need for apt caches
+RUN apk add --no-cache \
+    bash \
+    ca-certificates \
+    curl \
+    git \
+    jq \
+    python3 \
+    py3-pip \
+    ripgrep \
+    py3-jwt \
+    py3-cryptography \
+    github-cli
+
+# Install any extra Python packages you want (optional, if not provided by apk)
+# RUN pip3 install --no-cache-dir pyjwt cryptography
+
+# Create a non‑root user
+RUN adduser -D -h /home/sandbox sandbox
+USER sandbox
+WORKDIR /home/sandbox
+
+CMD ["sleep", "infinity"]

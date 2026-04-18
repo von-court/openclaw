@@ -13,6 +13,7 @@ services:
     volumes:
       - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
       - ${OPENCLAW_WORKSPACE_DIR}:/home/node/.openclaw/workspace
+      - qmd-models:/home/node/.cache/qmd/models
       ## Uncomment the lines below to enable sandbox isolation
       ## (agents.defaults.sandbox). Requires Docker CLI in the image
       ## (build with --build-arg OPENCLAW_INSTALL_DOCKER_CLI=1) or use
@@ -76,3 +77,6 @@ services:
     entrypoint: ["node", "dist/index.js"]
     depends_on:
       - openclaw-gateway
+
+volumes:
+  qmd-models: 

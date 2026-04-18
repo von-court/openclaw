@@ -196,6 +196,9 @@ RUN install -d -m 0755 "$COREPACK_HOME" && \
     done && \
     chmod -R a+rX "$COREPACK_HOME"
 
+# Install @tobilu/qmd globally for QMD memory backend support
+RUN npm install -g @tobilu/qmd
+
 # Install additional system packages needed by your skills or extensions.
 # Example: docker build --build-arg OPENCLAW_DOCKER_APT_PACKAGES="python3 wget" .
 ARG OPENCLAW_DOCKER_APT_PACKAGES=""
@@ -260,10 +263,15 @@ RUN ln -sf /app/openclaw.mjs /usr/local/bin/openclaw \
 
 ENV NODE_ENV=production
 
+# Make qmd models volume writable
+RUN mkdir -p /home/node/.cache/qmd/models && chown -R node:node /home/node/.cache/qmd/models
+VOLUME ["/home/node/.cache/qmd/models"]
+
 # Security hardening: Run as non-root user
 # The node:24-bookworm image includes a 'node' user (uid 1000)
 # This reduces the attack surface by preventing container escape via root privileges
 USER node
+
 
 # Start gateway server with default config.
 # Binds to loopback (127.0.0.1) by default for security.
